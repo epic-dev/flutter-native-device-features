@@ -6,14 +6,14 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
 
 class ImageInput extends StatefulWidget {
-  Function onSelectImage;
+  final Function onSelectImage;
   ImageInput(this.onSelectImage);
   @override
   _ImageInputState createState() => _ImageInputState();
 }
 
 class _ImageInputState extends State<ImageInput> {
-  File _storedImage = null;
+  File _storedImage;
 
   Future<void> _takePicture() async {
     final picker = ImagePicker();
