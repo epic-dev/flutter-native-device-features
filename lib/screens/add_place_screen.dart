@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_locations/models/place.dart';
 import 'package:flutter_locations/provider/places.dart';
 import 'package:flutter_locations/widgets/imag_input.dart';
+import 'package:flutter_locations/widgets/location_input.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 class AddPlaceScreen extends StatefulWidget {
@@ -14,17 +17,22 @@ class AddPlaceScreen extends StatefulWidget {
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   TextEditingController _titleController = TextEditingController();
   File _pcikedImage;
+  PlaceLocation _pickedLocation;
 
   void _selectImage(File pickedImage) {
     _pcikedImage = pickedImage;
   }
 
   void _savePlace() {
-    if (_titleController.text.isEmpty || _pcikedImage == null) {
+    if (_titleController.text.isEmpty || _pcikedImage == null || _pickedLocation == null) {
       return;
     }
-    Provider.of<Places>(context, listen: false).addPlace(_titleController.text, _pcikedImage);
+    Provider.of<Places>(context, listen: false).addPlace(_titleController.text, _pcikedImage, _pickedLocation);
     Navigator.of(context).pop();
+  }
+
+  void _selectPlace(double lat, double lng) {
+    _pickedLocation  = PlaceLocation(lat, lng, ' ');
   }
 
   @override
@@ -51,13 +59,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                     ),
                     SizedBox(height: 8.0),
                     ImageInput(_selectImage),
-                    // TextField(
-                    //   controller: _titleController,
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Image',
-                    //   ),
-                    // ),
-                    // TextField(),
+                    SizedBox(height: 8.0),
+                    LocationInput(_selectPlace),
                   ],
                 ),
               ),
